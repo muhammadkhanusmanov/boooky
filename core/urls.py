@@ -1,10 +1,10 @@
 from django.contrib import admin
 from django.urls import path
-from book.views import (
+from main_api.views import (
     AdminView,
     RegisterView,
     UserView,
-    LoginView,SbookGet,
+    LoginView,SbookGet,SearchBooks,
     LogoutView,LibMessage,ReplyView,
     EBookView,PBookView,GetPBook,UserMessage,
     GetEbookView, SavefileView, GetImgView
@@ -35,5 +35,8 @@ urlpatterns = [
     path('sendreply/',ReplyView.as_view()),
     path('getsbooks/',SbookGet.as_view()),
     path('sbook/<int:id>', SbookGet.as_view()),
-    path('usersbooks/',SbookGet.as_view())
+    path('usersbooks/',SbookGet.as_view()),
+    path('serchsbook/',SbookGet.as_view()),
+    path('searchebook/',SearchBooks.as_view()),
+    path('searchpbook/',SearchBooks.as_view()),
 ]
