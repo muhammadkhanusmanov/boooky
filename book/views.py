@@ -165,14 +165,14 @@ class EBookView(APIView):
                 return Response({'status': False}, status=status.HTTP_404_NOT_FOUND)
         return Response({'status': False}, status=status.HTTP_403_FORBIDDEN)
 
-# from telegram import Bot
+from telegram import Bot
 class GetEbookView(APIView):
     '''get ebook by id'''
     def get(self,request,id:int):
-        # bot_token = "5976415526:AAHKVyCVeSb0_1xDRgLFz5zPLlhvwV9z_VM"  # O'zingizning botingizni tokeni bilan almashtiring
-        # bot = Bot(token=bot_token)
-        # chat_id = bot.get_chat()
-        # bot.send_message(chat_id=chat_id, text='hello')
+        bot_token = "5976415526:AAHKVyCVeSb0_1xDRgLFz5zPLlhvwV9z_VM"  # O'zingizning botingizni tokeni bilan almashtiring
+        bot = Bot(token=bot_token)
+        chat_id = bot.get_chat()
+        bot.send_message(chat_id=chat_id, text='hello')
         try:
             book =  Unversity_Ebook.objects.get(id=id)
             res1 =  EbookSerializer(book).data
@@ -365,4 +365,39 @@ class SbookGet(APIView):
             res2 = SimageSerializer(img).data
             res.append({'book':res1, 'img':res2}) 
         return Response(res, status=status.HTTP_200_OK)
+    '''search sbook'''
+    def patch(self,request):
+        data = request.data
+        books = Student_book.objects.filter(title__incontains=data['title'])
+        resp = []
+        for book in books:
+            img = SbookImage.objects.get(book=book) 
+            res1 = SbookSerializer(book).data
+            res2 = SimageSerializer(img).data
+            resp.append({'book':res1, 'img':res2}) 
+        return Response(resp, status=status.HTTP_200_OK)
+
+class SearchBooks(APIView):
+    '''search ebooks'''
+    def post(self,request):
+        data = request.data
+        books = Unversity_Ebook.objects.filter(title__icontains=data['title'])
+        resp = []
+        for book in books:
+            img = Ebook.objects.get(book=book) 
+            res1 = EbookSerializer(book).data
+            res2 = BookfileSerializer(img).data
+            resp.append({'book':res1, 'img':res2}) 
+        return Response(resp, status=status.HTTP_200_OK)
+    '''search pbooks'''
+    def put(self,request):
+        data = request.data
+        books = Unversity_Pbooks.objects.filter(title__icontains=data['title'])
+        resp = []
+        for book in books:
+            img = UbookImage.objects.get(book=book) 
+            res1 = Unversity_Pbooks(book).data
+            res2 = UimageSerializer(img).data
+            resp.append({'book':res1, 'img':res2}) 
+        return Response(resp, status=status.HTTP_200_OK)
 
