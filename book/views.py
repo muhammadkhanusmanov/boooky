@@ -21,7 +21,7 @@ from .serializers.message_serializers import (
 from .serializers.student_serializers import SbookSerializer, SimageSerializer
 
 from .models import (
-    Unversity_Ebook,Students_book, SbookImage, UbookImage, Ebook, Unversity_Pbooks,PositionUsers,Message, Reply
+    Unversity_Ebook,Student_book, SbookImage, UbookImage, Ebook, Unversity_Pbooks,PositionUsers,Message, Reply
 )
 
 class AdminView(APIView):
@@ -165,14 +165,14 @@ class EBookView(APIView):
                 return Response({'status': False}, status=status.HTTP_404_NOT_FOUND)
         return Response({'status': False}, status=status.HTTP_403_FORBIDDEN)
 
-from telegram import Bot
+# from telegram import Bot
 class GetEbookView(APIView):
     '''get ebook by id'''
     def get(self,request,id:int):
-        bot_token = "5976415526:AAHKVyCVeSb0_1xDRgLFz5zPLlhvwV9z_VM"  # O'zingizning botingizni tokeni bilan almashtiring
-        bot = Bot(token=bot_token)
-        chat_id = bot.get_chat()
-        bot.send_message(chat_id=chat_id, text='hello')
+        # bot_token = "5976415526:AAHKVyCVeSb0_1xDRgLFz5zPLlhvwV9z_VM"  # O'zingizning botingizni tokeni bilan almashtiring
+        # bot = Bot(token=bot_token)
+        # chat_id = bot.get_chat()
+        # bot.send_message(chat_id=chat_id, text='hello')
         try:
             book =  Unversity_Ebook.objects.get(id=id)
             res1 =  EbookSerializer(book).data
@@ -337,7 +337,7 @@ class ReplyView(APIView):
 class SbookGet(APIView):
     authentication_classes = [TokenAuthentication]
     def get(self, request):
-        books = Students_book.objects.all()
+        books = Student_book.objects.all()
         res = []
         for book in books:
             img = SbookImage.objects.get(book=book) 
@@ -345,4 +345,24 @@ class SbookGet(APIView):
             res2 = SimageSerializer(img).data
             res.append({'book':res1, 'img':res2})
         return Response(res,status=status.HTTP_200_OK)
-        
+    '''get a book by id'''
+    def post(self,request,id:int):
+        book = Student_book.objects.get(id=id)
+        img = SbookImage.objects.get(book=book)
+        res = {
+            'book':SbookSerializer(book).data,
+            'img':SimageSerializer(img).data
+        }
+        return Response(res,status=status.HTTP_200_OK)
+    '''get user's book'''
+    def put(self,request):
+        user = request.user
+        res = []
+        books = Student_book.objects.filter(student=user) 
+        for book in books:
+            img = SbookImage.objects.get(book=book) 
+            res1 = SbookSerializer(book).data
+            res2 = SimageSerializer(img).data
+            res.append({'book':res1, 'img':res2}) 
+        return Response(res, status=status.HTTP_200_OK)
+

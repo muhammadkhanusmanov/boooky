@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path
-from main_api.views import (
+from book.views import (
     AdminView,
     RegisterView,
     UserView,
@@ -35,4 +35,5 @@ urlpatterns = [
     path('sendreply/',ReplyView.as_view()),
     path('getsbooks/',SbookGet.as_view()),
     path('sbook/<int:id>', SbookGet.as_view()),
+    path('usersbooks/',SbookGet.as_view())
 ]

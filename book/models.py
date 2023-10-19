@@ -67,7 +67,7 @@ class Ebook(models.Model):
         return self.book.title
 
 
-class Students_book(models.Model):
+class Student_book(models.Model):
     cover_choices = [
         ('PB', 'Paperback'),
         ('EB', 'E-book'),
@@ -77,13 +77,14 @@ class Students_book(models.Model):
     cover = cover = models.CharField(max_length=20, choices=cover_choices, default='HC')
     authors = models.CharField(max_length=200)
     description = models.TextField()
+    student = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
 
 
 class SbookImage(models.Model):
-    book = models.ForeignKey(Students_book, on_delete=models.CASCADE)
+    book = models.ForeignKey(Student_book, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='sbook_images')
 
     def __str__(self):
