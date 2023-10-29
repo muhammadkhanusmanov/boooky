@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 class Staff(models.Model):
     staff = models.CharField(max_length=15)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='staff')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='staf')
 
     def __str__(self) -> str:
         return self.user.username
