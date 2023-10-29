@@ -47,7 +47,7 @@ class RegisterView(APIView):
                 position = Staff.objects.create(user=user, staff='student')
                 position.save()
                 token = Token.objects.create(user=user)
-                return Response({'status':True,'created user':str(user.staff),'token':token.key},status=status.HTTP_201_CREATED)
+                return Response({'status':True,'staff':str(position.staff),'token':token.key},status=status.HTTP_201_CREATED)
         return Response({'status':'BAD_REQUEST'},status=status.HTTP_400_BAD_REQUEST)
 
         
