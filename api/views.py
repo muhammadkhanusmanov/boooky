@@ -43,11 +43,30 @@ class RegisterView(APIView):
                     password=make_password(password),
                     first_name=first_name
                 )
-                user.save()
+                user.save() 
                 position = Staff.objects.create(user=user, staff='student')
                 position.save()
                 token = Token.objects.create(user=user)
                 return Response({'status':True,'staff':str(position.staff),'token':token.key},status=status.HTTP_201_CREATED)
         return Response({'status':'BAD_REQUEST'},status=status.HTTP_400_BAD_REQUEST)
 
+class LogView(APIView):
+    authentication_classes = [BasicAuthentication]
+    def post(self, request):
+        user = request.user
+        token = Token.objects.get_or_create(user=user)
+        token = str(token[0])
+        staff = Staff.objects.get(user=user)
+        return Response({'token':token,'staff':str(staff.staff)})
+
+class Logout(APIView):
+    '''logout user'''
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    def delete(self,request):
+        user = request.user
+        print(user)
+        token = Token.objects.get(user=user)
+        token.delete()
+        return Response({'status':'Token deleted'},status=status.HTTP_200_OK)
         
