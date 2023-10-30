@@ -10,9 +10,9 @@ from django.contrib.auth.hashers import make_password
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework.authentication import TokenAuthentication, BasicAuthentication
 
-from .models import User, Staff
+from .models import User, Staff, Avatar
 
-from .serializers.user_serializers import UserSerializer, StaffSerializer
+from .serializers.user_serializers import UserSerializer, StaffSerializer, AvatarSerializer
 
 class UserView(APIView):
     def get(self, request):
@@ -65,7 +65,23 @@ class Logout(APIView):
     permission_classes = [IsAuthenticated]
     def delete(self,request):
         user = request.user
-        print(user)
         token = Token.objects.get(user=user)
         token.delete()
         return Response({'status':'Token deleted'},status=status.HTTP_200_OK)
+
+class AddImage(APIView):
+    '''Add a image for a user'''
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    parser_classes = (MultiPartParser, FormParser)
+    def post(self, request):
+        user = request.user
+        image = request.data.get('img', None)
+        if image is not None:
+            avatar = Avatar.objects.create(
+                user=user,
+                img=image
+            )
+            avatar.save()
+            return Response({'status': 'Avatar yaratildi','user': str(user.username)},status=status.HTTP_201_CREATED)
+        return Response({'status': 'Image topilmadi'},status=status.HTTP_400_BAD_REQUEST)
