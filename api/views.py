@@ -69,4 +69,3 @@ class Logout(APIView):
         token = Token.objects.get(user=user)
         token.delete()
         return Response({'status':'Token deleted'},status=status.HTTP_200_OK)
-        
