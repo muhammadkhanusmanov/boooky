@@ -9,3 +9,6 @@ class Staff(models.Model):
     def __str__(self) -> str:
         return self.user.username
 
+class Avatar(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    img = models.ImageField(upload_to='images')
