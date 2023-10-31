@@ -10,5 +10,5 @@ class Staff(models.Model):
         return self.user.username
 
 class Avatar(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='pic')
     img = models.ImageField(upload_to='images')
