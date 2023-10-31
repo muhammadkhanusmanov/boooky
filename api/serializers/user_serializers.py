@@ -12,7 +12,7 @@ class StaffSerializer(ModelSerializer):
 class UserSerializer(ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'first_name', 'last_name', 'email','staff','pic')
+        fields = ('id', 'username', 'first_name', 'last_name', 'email','staf','pic')
 
 class AvatarSerializer(ModelSerializer):
     class Meta:
