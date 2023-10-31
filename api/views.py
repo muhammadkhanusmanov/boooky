@@ -29,6 +29,7 @@ class UserView(APIView):
 class RegisterView(APIView):
     '''sign up'''
     def post(self, request):
+        print(1)
         data = request.data
         username = data.get('username',None)
         password = data.get('password',None)
@@ -95,5 +96,16 @@ class Avatarka(APIView):
             return Response({'status':'Avatar o\'chirildi', 'username':str(user.username)}, status=status.HTTP_200_OK)
         except:
             return Response({'status':'Avatar yo\'q', 'username':str(user.username)}, status=status.HTTP_400_BAD_REQUEST)
+    
+class GetAvatar(APIView):
+    def get(self, request,id:str):
+        try:
+            file = Avatar.objects.get(id=id)
+            img =file.img 
+            file = open(img.path, 'rb')
+            resp = FileResponse(img)
+            return resp
+        except:
+            return Response({'status':False}, status=status.HTTP_400_BAD_REQUEST)
     
 
