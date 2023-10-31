@@ -69,7 +69,7 @@ class Logout(APIView):
         token.delete()
         return Response({'status':'Token deleted'},status=status.HTTP_200_OK)
 
-class AddImage(APIView):
+class Avatarka(APIView):
     '''Add a image for a user'''
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -85,3 +85,15 @@ class AddImage(APIView):
             avatar.save()
             return Response({'status': 'Avatar yaratildi','user': str(user.username)},status=status.HTTP_201_CREATED)
         return Response({'status': 'Image topilmadi'},status=status.HTTP_400_BAD_REQUEST)
+
+    '''delete image'''
+    def delete(self, request):
+        user = request.user
+        try:
+            img = Avatar.objects.get(user=user)
+            img.delete()
+            return Response({'status':'Avatar o\'chirildi', 'username':str(user.username)}, status=status.HTTP_200_OK)
+        except:
+            return Response({'status':'Avatar yo\'q', 'username':str(user.username)}, status=status.HTTP_400_BAD_REQUEST)
+    
+
