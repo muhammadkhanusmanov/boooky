@@ -130,6 +130,12 @@ class MessageView(APIView):
         data = request.data
         try:
             msg = Message.objects.create(
-                
+                from_user=user,
+                text=data['text']
             )
+            msg.save()
+            msg = MessageSerializer(msg).data
+            return Response({'status':True,'message':msg}, status.HTTP_200_OK)
+        except:
+            return Response({'status':False}, status.HTTP_400_BAD_REQUEST)
     
