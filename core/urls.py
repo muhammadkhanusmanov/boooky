@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path
-from api.views import UserView, RegisterView,LogView,Logout, Avatarka,GetAvatar, MessageView
+from api.views import UserView, RegisterView,LogView,Logout, Avatarka,GetAvatar, MessageView, TestView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -13,4 +13,5 @@ urlpatterns = [
     path('uploadavatar/<str:id>',GetAvatar.as_view()),
     path('messages/',MessageView.as_view()),
     path('addmessage/',MessageView.as_view()),
+    path('addtest/',TestView.as_view())
 ]
