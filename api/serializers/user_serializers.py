@@ -1,7 +1,7 @@
 from rest_framework.serializers import ModelSerializer
 from django.contrib.auth.models import User
 from ..models import (
-    Staff, Avatar
+    Staff, Avatar, Message
 )
 
 class StaffSerializer(ModelSerializer):
@@ -17,4 +17,9 @@ class UserSerializer(ModelSerializer):
 class AvatarSerializer(ModelSerializer):
     class Meta:
         model = Avatar
+        fields = '__all__'
+
+class MessageSerializer(ModelSerializer):
+    class Meta:
+        model = Message
         fields = '__all__'
