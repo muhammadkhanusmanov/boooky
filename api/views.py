@@ -18,12 +18,17 @@ class UserView(APIView):
     def get(self, request):
         response = []
         users = User.objects.all()
+        a=0
         for user in users:
             staff = Staff.objects.get(user=user)
-            staff = StaffSerializer(staff).data
+            staff = str(staff.staff)
             user = UserSerializer(user).data
             user['staff'] = staff
-            response.append(user)
+            try:
+                user['img'] = f'https://boookyuz.pythonanywhere.com/uploadavatar/{user["pic"][0]}'
+                response.append(user)
+            except:
+                response.append(user)
         return Response(response)
 
 class RegisterView(APIView):
