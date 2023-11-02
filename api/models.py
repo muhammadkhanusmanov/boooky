@@ -12,3 +12,8 @@ class Staff(models.Model):
 class Avatar(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='pic')
     img = models.ImageField(upload_to='images')
+
+class Message(models.Model):
+    from_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    text = models.TextField()
+    dt = models.DateTimeField(auto_created=True, auto_now=True)
