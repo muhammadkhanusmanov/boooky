@@ -10,10 +10,9 @@ from django.contrib.auth.hashers import make_password
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework.authentication import TokenAuthentication, BasicAuthentication
 
-from .models import User, Staff, Avatar, Message
+from .models import User, Staff, Avatar, Message, TestModel
 
 from .serializers.user_serializers import UserSerializer, StaffSerializer, AvatarSerializer, MessageSerializer
-
 class UserView(APIView):
     def get(self, request):
         response = []
@@ -138,4 +137,27 @@ class MessageView(APIView):
             return Response({'status':True,'message':msg}, status.HTTP_200_OK)
         except:
             return Response({'status':False}, status.HTTP_400_BAD_REQUEST)
+import json
+class TestView(APIView):
+    '''add a new test'''
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    def post(self, request):
+        user = request.user
+        data = request.data
+        data = json.loads(data)
+        try:
+            test = TestModel.objects.create(
+                test_id=data['test_id'],
+                test_name=data['test_name'],
+                tests=str(data['tests']),
+                answers=data['answers']
+            )
+            test.save()
+            return Response({'success': True}, status=status.HTTP_201_CREATED)
+        except:
+            return Response({'success': False}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
     
