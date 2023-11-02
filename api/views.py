@@ -10,9 +10,9 @@ from django.contrib.auth.hashers import make_password
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework.authentication import TokenAuthentication, BasicAuthentication
 
-from .models import User, Staff, Avatar
+from .models import User, Staff, Avatar, Message
 
-from .serializers.user_serializers import UserSerializer, StaffSerializer, AvatarSerializer
+from .serializers.user_serializers import UserSerializer, StaffSerializer, AvatarSerializer, MessageSerializer
 
 class UserView(APIView):
     def get(self, request):
@@ -114,3 +114,22 @@ class GetAvatar(APIView):
             return Response({'status':False}, status=status.HTTP_400_BAD_REQUEST)
     
 
+class MessageView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    def post(self,request):
+        user = request.user
+        result = {'user':str(user.id),'messages':[]}
+        messages = Message.objects.all()
+        for message in messages:
+            msg = MessageSerializer(message).data
+            result['messages'].append(msg)
+        return Response(result, status=status.HTTP_200_OK)
+    def put(self,request):
+        user = request.user
+        data = request.data
+        try:
+            msg = Message.objects.create(
+                
+            )
+    
