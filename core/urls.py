@@ -12,4 +12,5 @@ urlpatterns = [
     path('deleteavatar/',Avatarka.as_view()),
     path('uploadavatar/<str:id>',GetAvatar.as_view()),
     path('messages/',MessageView.as_view()),
+    path('addmessage/',MessageView.as_view()),
 ]
