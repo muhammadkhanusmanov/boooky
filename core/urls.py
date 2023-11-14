@@ -13,5 +13,6 @@ urlpatterns = [
     path('uploadavatar/<str:id>',GetAvatar.as_view()),
     path('messages/',MessageView.as_view()),
     path('addmessage/',MessageView.as_view()),
-    path('addtest/',TestView.as_view())
+    path('addtest/',TestView.as_view()),
+    path('checktest/',TestView.as_view()),
 ]
