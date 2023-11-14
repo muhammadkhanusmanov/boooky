@@ -12,7 +12,7 @@ from rest_framework.authentication import TokenAuthentication, BasicAuthenticati
 
 from .models import User, Staff, Avatar, Message, TestModel
 
-from .serializers.user_serializers import UserSerializer, StaffSerializer, AvatarSerializer, MessageSerializer
+from .serializers.user_serializers import UserSerializer, StaffSerializer, AvatarSerializer, MessageSerializer, TestSerializer
 class UserView(APIView):
     def get(self, request):
         response = []
@@ -157,6 +157,31 @@ class TestView(APIView):
             return Response({'success': True}, status=status.HTTP_201_CREATED)
         except:
             return Response({'success': False}, status=status.HTTP_400_BAD_REQUEST)
+    '''check a test'''
+    def put(self,request):
+        user = request.user
+        data = request.data
+        data = json.loads(data)
+        test_id = data['test_id']
+        rs = {'test':'','true_answer':0,'false_answer':0,'test_statistic':[],'user':{}}
+        try:
+            test = TestModel.objects.get(test_id=test_id)
+            answer = list((test.answers).split(','))
+            your_answer = list(data['answer'].split(','))
+            for i in  range(len(answer)):
+                if answer[i] == your_answer[i]:
+                    rs['true_answer']+=1
+                else:
+                    rs['false_answer']+=1
+                rs['test_statistic'].append({'test_tartibi':i+1, 'your answer': your_answer[i],'true answer':answer[i]})
+            rs['test']=test.test_id
+            rs['user'] = UserSerializer(user).data
+            return Response(rs, status=status.HTTP_200_OK)
+        except:
+            return Response({'staus':'bad request'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
 
 
 
